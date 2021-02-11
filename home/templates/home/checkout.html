@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+  <head>
+    <title>Заказ "Малина"</title>
+    <link rel="icon" href="{% static 'dop_menu/images/favicon.ico' %}" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'dop_menu/css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{%  static 'dop_menu/css/animate.css' %}">
+    
+    <link rel="stylesheet" href="{%  static 'dop_menu/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dop_menu/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dop_menu/css/magnific-popup.css' %}">
+
+    <link rel="stylesheet" href="{%  static 'dop_menu/css/aos.css' %}">
+
+    <link rel="stylesheet" href="{%  static 'dop_menu/css/ionicons.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'dop_menu/css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{%  static 'dop_menu/css/jquery.timepicker.css' %}">
+
+    
+    <link rel="stylesheet" href="{%  static 'dop_menu/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{%  static 'dop_menu/css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'dop_menu/css/style.css' %}">
+
+<style>
+
+.cart-row{
+	display: flex;
+    align-items: flex-stretch;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ececec;
+
+}
+
+.row-image{
+	width: 100px;
+}
+
+
+</style>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'malina_home' %}"><img class="img-fluid" src="{%  static 'home/images/malina-logo.png' %}"></a>
+          <button href="#menu" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Меню
+          </button>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="{% url 'malina_home' %}" class="nav-link">Главная</a></li>
+            <li class="nav-item"><a href="{% url 'dop_menu' %}" class="nav-link">Доп. меню</a></li>
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Доставка</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a href="{% url 'delivery' %}" class="dropdown-item">Доставка еды</a>
+              <a href="{% url 'complex_delivery' %}" class="dropdown-item">Доставка комплексных обедов</a>
+              <a href="{% url 'vip_delivery' %}" class="dropdown-item">Доставка VIP обедов</a>
+              <a href="{% url 'banket_delivery' %}" class="dropdown-item">Банкетное меню</a>
+              <a href="{% url 'children_delivery' %}" class="dropdown-item">Доставка детям</a>
+            </div>
+            </li>
+            <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">Мы</a></li>
+              <li class="nav-item"><a href="{% url 'cart' %}" class="nav-link"><img class="cart-img" style="width: 25px" src="{% static 'home/images/cart.png' %}">{{ cartItems }}</a></li>
+              {% if request.user.is_authenticated %}
+              <li class="nav-item"><a class="nav-link">Здравствуйте, {{ request.user }}</a></li>
+              <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Выйти</a></li>
+              {% else %}
+              <li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Регистрация</a></li>
+              <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Войти</a></li>
+              {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+          <div class="col-md-7 heading-section ftco-animate text-center">
+            <h2 class="mb-4">Заказ</h2>
+          </div>
+        </div>
+
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="box-element" id="form-wrapper">
+				<form id="form">
+                    {% csrf_token %}
+    					<div id="user-info">
+                            <hr>
+    						<p style="color: white">Адрес по накладной:</p>
+    						<hr>
+    						<div class="form-field">
+    							<input class="form-control" type="text" name="name" placeholder="Имя*.." required>
+    						</div>
+    						<div class="form-field">
+    							<input class="form-control" type="text" name="sec_name" placeholder="Фамилия..">
+    						</div>
+    						<div class="form-field">
+    							<input class="form-control" type="text" name="company" placeholder="Компания..">
+    						</div>
+    						<div class="form-field">
+    							<input required class="form-control" type="email" name="email" placeholder="Email*..">
+    						</div>
+    					</div>
+
+    					<div id="shipping-info">
+    						<div class="form-field">
+    							<input required class="form-control" type="text" name="address" placeholder="Адрес*..">
+    						</div>
+    						<div class="form-field">
+    							<input required class="form-control" type="text" name="phone" placeholder="Телефон*..">
+    						</div>
+    						<div class="form-field">
+    							<input required class="form-control" type="text" name="consent" placeholder="Даю согласие на обработку персональных данных*..">
+    						</div>
+    						<div class="form-field">
+    							<input class="form-control" type="text" name="question" placeholder="Откуда вы узнали о нас?">
+    						</div>
+    						<div class="form-field">
+    							<input class="form-control" type="text" name="note" placeholder="Примечание..">
+    						</div>
+    					
+                        <hr>
+                            <div class="form-field">
+                              <input required class="form-field-input" type="checkbox" name="checkboxRules" id="checkbox-rules">
+                              <label class="form-field-label" for="checkbox-rules">
+                                  <h5>Я согласен с <a href="{% url 'conditions' %}">условиями</a></h5>
+                              </label>
+                            </div>
+                            <hr>
+    						<p style="color: white">Адрес доставки и адрес по накладной отличаются</p><input type="checkbox" id="myCheck" onclick="Checked()">
+    						<hr>
+                            <div id="shipping-info-2" style="display: none">
+                                <hr>
+                                <p style="color: white">Адрес доставки:</p>
+                                <hr>
+                                <div class="form-field">
+                                    <input class="form-control" type="text" name="name_2" placeholder="Имя*..">
+                                </div>
+                                <div class="form-field">
+                                    <input class="form-control" type="text" name="sec_name_2" placeholder="Фамилия..">
+                                </div>
+                                <div class="form-field">
+                                    <input class="form-control" type="text" name="company_2" placeholder="Компания..">
+                                </div>
+                                <div class="form-field">
+                                    <input class="form-control" type="text" name="address_2" placeholder="Адрес*..">
+                                </div>
+                                <div class="form-field">
+                                    <input class="form-control" type="text" name="phone_2" placeholder="Телефон*..">
+                                </div>
+                            </div>
+                   </div>         
+    					    <hr>
+                              <div class="form-field">
+                                     <button style="color: white" id="form-button" type="submit" class="btn btn-primary">Отправить</button>
+                              </div>
+				    </form>
+			</div>
+
+			<br>
+
+		</div>
+
+		<div class="col-lg-6">
+			<div class="box-element">
+				<a style="background-color: #e3007b; color: white" class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Вернуться в корзину</a>
+				<hr>
+				<h3>Итого</h3>
+				<hr>
+                {% for item in items %}
+				<div class="cart-row">
+					<div style="flex:2"><img class="row-image" src="{{ item.product.imageURL }}"></div>
+					<div style="flex:2"><p>{{ item.product.name }}</p></div>
+					<div style="flex:1"><p>{{ item.product.price }}</p></div>
+					<div style="flex:1"><p>x{{ item.quantity }}</p></div>
+				</div>
+                {% endfor %}
+				<h5>Товаров: {{ order.get_cart_items }}</h5>
+				<h5>Всего: {{ order.get_cart_total|floatformat:2 }}₽</h5><p>(Учитывая доставку за 150₽)</p>
+			</div>
+		</div>
+	</div>
+      </div>
+    </section>
+
+    <footer class="ftco-footer ftco-section img">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-lg-4 col-md-4 mb-5 mb-md-5">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Мы открыты</h2>
+              <p>Пн-Чт, Вс: 09:00 - 22:00 <br> Пт-Сб: 09:00 - 24:00</p>
+              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                <li class="ftco-animate"><a href="https://vk.com/malina.tver"><span class="icon-vk"></span></a></li>
+                <li class="ftco-animate"><a href="https://www.facebook.com/groups/malina69/"><span class="icon-facebook"></span></a></li>
+                <li class="ftco-animate"><a href="https://www.instagram.com/kafemalinatver14/"><span class="icon-instagram"></span></a></li>
+              </ul>
+            </div>
+          </div>  
+          <div class="col-lg-4 col-md-4 mb-5 mb-md-5">
+             <div class="ftco-footer-widget mb-4 ml-md-4">
+              <h2 class="ftco-heading-2">Телефоны</h2>
+              <ul class="list-unstyled">
+                <li><a href="#"><span class="icon icon-phone"></span><span class="text">301-301</span></a></li>
+                <li><a href="#"><span class="icon icon-phone"></span><span class="text">301-100</span></a></li>
+                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+7 919 066 8008</span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 mb-5 mb-md-5">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Контакты</h2>
+              <div class="block-23 mb-3">
+                <ul>
+                  <li><span class="icon icon-map-marker"></span><span class="text">г. Тверь пр-т Победы, д.14 (здание Тверской Швейной Фабрики) кафе "МАЛИНА"</span></li>
+                  <li><a href="#"><span class="icon icon-envelope"></span><span class="text">trapeza2006@mail.ru</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+
+            <p>
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="{%  static 'dop_menu/js/jquery.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/popper.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/bootstrap.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.easing.1.3.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.waypoints.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.stellar.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/owl.carousel.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/aos.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/bootstrap-datepicker.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.timepicker.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/scrollax.min.js' %}"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="{%  static 'dop_menu/js/google-map.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/main.js' %}"></script>
+   <script>
+                var user = '{{ request.user }}'
+
+                function getToken(name) {
+                        let cookieValue = null;
+                        if (document.cookie && document.cookie !== '') {
+                            const cookies = document.cookie.split(';');
+                            for (let i = 0; i < cookies.length; i++) {
+                                const cookie = cookies[i].trim();
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                }
+
+                const csrftoken = getToken('csrftoken');
+
+
+            function getCookie(name) {
+                var cookieArr = document.cookie.split(";");
+
+                for(var i = 0; i < cookieArr.length; i++) {
+                    var cookiePair = cookieArr[i].split("=");
+
+                    if(name == cookiePair[0].trim()) {
+                        return decodeURIComponent(cookiePair[1]);
+                    }
+                }
+                return null;
+            }
+            var cart = JSON.parse(getCookie('cart'))
+            if(cart == undefined){
+                cart = {}
+                console.log('Cart was created!')
+                document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+            }
+            console.log('Cart:', cart)
+
+        var total = '{{ order.get_cart_total }}'
+        var form = document.getElementById('form')
+
+        function Checked() {
+            var checkBox = document.getElementById("myCheck");
+            var div = document.getElementById("shipping-info-2");
+            var name = document.getElementById("name-2");
+            var address = document.getElementById("address-2");
+            var phone = document.getElementById("phone-2");
+            if (checkBox.checked == true){
+                div.style.display = "block";
+                name.setAttribute("required", "required");
+                address.setAttribute("required", "required");
+                phone.setAttribute("required", "required");
+            } else {
+                div.style.display = "none";
+                name.removeAttribute("required");
+                address.removeAttribute("required");
+                phone.removeAttribute("required");
+            }
+        }
+
+        document.getElementById('form-button').addEventListener('click', (e) => {
+            Payment()
+        })
+
+        function Payment() {
+            var cash = document.getElementById("radio-cash");
+            var robokassa = document.getElementById("radio-robokassa");
+            var button = document.getElementById("form-button");
+
+            var userFormData = {
+                'name': null,
+                'sec_name': null,
+                'company': null,
+                'email': null,
+                'address': null,
+                'phone': null,
+                'consent': null,
+                'question': null,
+                'note': null,
+                'difference_radio': null,
+                'name_2': null,
+                'sec_name_2': null,
+                'company_2': null,
+                'address_2': null,
+                'phone_2': null,
+                'total': total,
+            }
+                userFormData.name = form.name.value
+                userFormData.sec_name = form.sec_name.value
+                userFormData.company = form.company.value
+                userFormData.email = form.email.value
+                userFormData.address = form.address.value
+                userFormData.phone = form.phone.value
+                userFormData.consent = form.consent.value
+                userFormData.question = form.question.value
+                userFormData.note = form.note.value
+
+                userFormData.name_2 = form.name_2.value
+                userFormData.sec_name_2 = form.sec_name_2.value
+                userFormData.company_2 = form.company_2.value
+                userFormData.address_2 = form.address_2.value
+                userFormData.phone_2 = form.phone_2.value
+
+             var url = '/process_order/';
+            console.log(csrftoken)
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRFToken": csrftoken,
+                },
+                body: JSON.stringify({'form': userFormData}),
+            })
+            .then(response => response.json())
+            .then(data=>{
+                console.log('data', data);
+                alert('Transaction comlete');
+                cart  = {}
+                document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/';
+                window.location.href = "{% url 'malina_home' %}";
+            });
+        }
+    </script>
+    
+  </body>
+</html>

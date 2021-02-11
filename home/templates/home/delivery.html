@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+  <head>
+    <title>Доставка</title>
+    <link rel="icon" href="{% static 'home/images/favicon.ico' %}" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'home/css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/animate.css' %}">
+
+    <link rel="stylesheet" href="{%  static 'home/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static  'home/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/magnific-popup.css' %}">
+
+    <link rel="stylesheet" href="{% static 'home/css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'home/css/ionicons.min.css' %}">
+
+    <link rel="stylesheet" href="{%  static 'home/css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{%  static 'home/css/jquery.timepicker.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'home/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{%  static 'home/css/icomoon.css' %}">
+    <link rel="stylesheet" href="{%  static 'home/css/style.css' %}">
+
+    <script type="text/javascript">
+            var user = '{{ request.user }}'
+
+            function getToken(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+            }
+
+            const csrftoken = getToken('csrftoken');
+
+            function getCookie(name) {
+                var cookieArr = document.cookie.split(";");
+
+                for(var i = 0; i < cookieArr.length; i++) {
+                    var cookiePair = cookieArr[i].split("=");
+
+                    if(name == cookiePair[0].trim()) {
+                        return decodeURIComponent(cookiePair[1]);
+                    }
+                }
+                return null;
+            }
+            var cart = JSON.parse(getCookie('cart'))
+            if(cart == undefined){
+                cart = {}
+                console.log('Cart was created!')
+                document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+            }
+            console.log('Cart:', cart)
+    </script>
+  </head>
+  <body>
+    <nav style="background: #121618 !important; z-index: 3;" class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'malina_home' %}"><img class="img-fluid" src="{%  static 'home/images/malina-logo.png' %}"></a>
+          <button href="#menu" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Меню
+          </button>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="{% url 'malina_home' %}" class="nav-link">Главная</a></li>
+            <li class="nav-item"><a href="{% url 'dop_menu' %}" class="nav-link">Доп. меню</a></li>
+          <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Доставка</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a href="{% url 'delivery' %}" class="dropdown-item">Доставка еды</a>
+              <a href="{% url 'complex_delivery' %}" class="dropdown-item">Доставка комплексных обедов</a>
+              <a href="{% url 'vip_delivery' %}" class="dropdown-item">Доставка VIP обедов</a>
+              <a href="{% url 'banket_delivery' %}" class="dropdown-item">Банкетное меню</a>
+              <a href="{% url 'children_delivery' %}" class="dropdown-item">Доставка детям</a>
+            </div>
+            </li>
+            <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">Мы</a></li>
+              <li class="nav-item"><a href="{% url 'cart' %}" class="nav-link"><img class="cart-img" style="width: 25px" src="{% static 'home/images/cart.png' %}">{{ cartItems }}</a></li>
+              {% if request.user.is_authenticated %}
+              <li class="nav-item"><a class="nav-link">Здравствуйте, {{ request.user }}</a></li>
+              <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Выйти</a></li>
+              {% else %}
+              <li class="nav-item"><a href="{% url 'register' %}" class="nav-link">Регистрация</a></li>
+              <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Войти</a></li>
+              {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+
+    <section class="home-slider owl-carousel img" style="background-image: url('/static/home/images/bg_1.jpg);">
+
+      <div class="slider-item" style="background-image: url('/static/home/images/bg_3.jpg');">
+      	<div class="overlay"></div>
+        <div class="container">
+          <div class="row slider-text justify-content-center align-items-center">
+
+            <div class="col-md-7 col-sm-12 text-center ftco-animate">
+            	<h1 class="mb-3 mt-5 bread">Доставка</h1>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="ftco-section">
+    	<div class="container">
+    		<div class="row justify-content-center mb-5 pb-3">
+          <div class="col-md-7 heading-section ftco-animate text-center">
+            <h2 class="mb-4">О доставке</h2>
+            <p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
+            <p class="mt-5">Все обеды бесплатно упакованы в термобоксы, супницы и контейнеры. Снабжены салфетками, одноразовыми приборами (ложка, вилка) и хлебом.</p>
+          </div>
+        </div>
+    		<div class="row">
+    			<div class="col-md-3 text-center ftco-animate">
+      			<div class="menu-wrap">
+      				<a href="#" class="menu-img img mb-4" style="background-image: url('/static/home/images/oredrerlist.png');"></a>
+      				<div class="text">
+      					<h3><a href="#">Прием заказов</a></h3>
+      					<p>Осуществляется с 9:00 до 17:00</p>
+      				</div>
+      			</div>
+      		</div>
+      		<div class="col-md-3 text-center ftco-animate">
+      			<div class="menu-wrap">
+      				<a href="#" class="menu-img img mb-4" style="background-image: url('/static/home/images/delivery.png');"></a>
+      				<div class="text">
+      					<h3><a href="#">Доставка бесплатно</a></h3>
+      					<p>Осуществляется при сумме заказа от 450 рублей</p>
+      				</div>
+      			</div>
+      		</div>
+      		<div class="col-md-3 text-center ftco-animate">
+      			<div class="menu-wrap">
+      				<a href="#" class="menu-img img mb-4" style="background-image: url('/static/home/images/time.png');"></a>
+      				<div class="text">
+      					<h3><a href="#">Время доставки</a></h3>
+      					<p>Доставка проходит в период с 11:00 до 16:00 (точное время доставки уточняйте у оператора)</p>
+      				</div>
+      			</div>
+      		</div>
+      		<div class="col-md-3 text-center ftco-animate">
+      			<div class="menu-wrap">
+      				<a href="#" class="menu-img img mb-4" style="background-image: url('/static/home/images/call.png');"></a>
+      				<div class="text">
+      					<h3><a href="#">Связаться</a></h3>
+      					<p>Позвоните нам 301-301 или просто оставьте заявку на нашем сайте и мы привезем вам обед прямо в офис</p>
+      				</div>
+      			</div>
+      		</div>
+    		</div>
+    	</div>
+    </section>
+
+    <footer class="ftco-footer ftco-section img">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-lg-4 col-md-4 mb-5 mb-md-5">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Мы открыты</h2>
+              <p>Пн-Чт, Вс: 09:00 - 22:00 <br> Пт-Сб: 09:00 - 24:00</p>
+              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                <li class="ftco-animate"><a href="https://vk.com/malina.tver"><span class="icon-vk"></span></a></li>
+                <li class="ftco-animate"><a href="https://www.facebook.com/groups/malina69/"><span class="icon-facebook"></span></a></li>
+                <li class="ftco-animate"><a href="https://www.instagram.com/kafemalinatver14/"><span class="icon-instagram"></span></a></li>
+              </ul>
+            </div>
+          </div>  
+          <div class="col-lg-4 col-md-4 mb-5 mb-md-5">
+             <div class="ftco-footer-widget mb-4 ml-md-4">
+              <h2 class="ftco-heading-2">Телефоны</h2>
+              <ul class="list-unstyled">
+                <li><a href="#"><span class="icon icon-phone"></span><span class="text">301-301</span></a></li>
+                <li><a href="#"><span class="icon icon-phone"></span><span class="text">301-100</span></a></li>
+                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+7 919 066 8008</span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 mb-5 mb-md-5">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Контакты</h2>
+              <div class="block-23 mb-3">
+                <ul>
+                  <li><span class="icon icon-map-marker"></span><span class="text">г. Тверь пр-т Победы, д.14 (здание Тверской Швейной Фабрики) кафе "МАЛИНА"</span></li>
+                  <li><a href="#"><span class="icon icon-envelope"></span><span class="text">trapeza2006@mail.ru</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+
+            <p>
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+  
+
+  <!-- loader-->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="{%  static 'dop_menu/js/jquery.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/popper.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/bootstrap.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.easing.1.3.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.waypoints.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.stellar.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/owl.carousel.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/aos.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/bootstrap-datepicker.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/jquery.timepicker.min.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/scrollax.min.js' %}"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="{%  static 'dop_menu/js/google-map.js' %}"></script>
+  <script src="{%  static 'dop_menu/js/main.js' %}"></script>
+    
+  </body>
+</html>
